@@ -121,12 +121,12 @@ const user_token = {
     } 
    
   }
-  finally {
-    if (db) {
-     closeDB();
-    }
+  // finally {
+  //   if (db) {
+  //    closeDB();
+  //   }
 
-  }
+  // }
  
 };
 
