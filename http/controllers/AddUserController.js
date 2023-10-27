@@ -76,11 +76,11 @@ catch(error){
     } 
 }
 
-finally{
-	if (db) {
-     closeDB();
-    }
-}
+// finally{
+// 	if (db) {
+//      closeDB();
+//     }
+// }
 
 
 }
