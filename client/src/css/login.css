@@ -1,0 +1,146 @@
+      .login-view  .container {
+            display: flex;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            flex-direction: row;
+
+        }
+
+         .login-view .left {
+            flex: 1;
+            background-image: url('../uploads/bg2.webp'); /* Change to your image URL */
+            background-size: cover;
+            border-radius: 8px 0 0 8px;
+            height: 100vh;
+        }
+
+
+@media (max-width:900px)
+
+{
+  .login-view .left{
+    display: none;
+  }
+  .login-view  .container {
+    flex-direction: column;
+    background-color: #fff;
+    box-shadow: none;
+
+
+
+        }
+   .login-view .right {
+
+    margin-top: 30px !important;
+    padding-bottom: 2%;
+
+    
+    }
+
+}
+       
+
+    
+        .login-view .right {
+            flex: 1;
+            padding: 5px;
+            margin-top: 1%;
+            height: 100%;
+        }
+
+        .login-view .login-form {
+            max-width: 300px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+      .login-view  .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+       .login-view label {
+            display: block;
+            font-weight: bold;
+        }
+
+       .login-view  .userName,
+       .login-view  .password {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+     
+
+    
+        .login-view .submit-btn{
+           
+            cursor: pointer;
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: all ease-in-out 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .login-view .submit-btn:hover{
+            background-color: #ccc;
+        }
+
+        .login-view .login-title{
+
+       text-decoration: underline;
+
+       text-decoration-thickness: 4px;
+
+        }
+
+/*        */
+
+
+.login-alert {
+  padding:12px 10px;
+  background-color: #f44336;
+  color: white;
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 20px;
+  opacity: 1.2;
+}
+
+.login-view .createAc-container{
+
+margin: 30px auto;
+}
+
+.login-view .createAc-container  a {
+
+color: green;
+text-decoration: none;
+cursor: pointer;
+font-size: 15px;
+}
+
+.login-view .login-options{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+.login-view .login-options-submit-btn{
+            cursor: pointer;
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: all ease-in-out 0.3s;
+        }
