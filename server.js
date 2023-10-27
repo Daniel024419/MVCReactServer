@@ -51,7 +51,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 const Middlewares  = require('./http/middlewares/authMiddleware');
 
 //index conrollers
-const  IndexController  = require('./http/controllers/indexController');
+const  IndexController  = require('./http/controllers/IndexController');
 
 //auth
 const AuthController  = require('./http/controllers/AuthController');
