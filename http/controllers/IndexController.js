@@ -9,13 +9,14 @@ const fs = require("fs");
 const path = require("path");
 const { MongoClient } = require("mongodb");
 
- foods = async (req, res, next) => {
+const index = async (req, res, next) => {
 
   try{
-     res.status(200);
-  res.send("foods");
-  next(); 
+  
+  res.sendFile(path.join(__dirname,'../../build','index.html'));
+
   }catch(e){
+
     console.log("index error ",e)
   }
 
@@ -23,5 +24,5 @@ const { MongoClient } = require("mongodb");
 
 
 module.exports= {
-  foods: foods,
+  index: index,
 };

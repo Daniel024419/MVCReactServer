@@ -222,7 +222,7 @@ const fetchUserProfile = async ( req ,res , next )=>{
 
   try {
     // path to the image on the server
-    const imagePath = path.join(process.cwd(), 'public/files', ''+profile);
+    const imagePath = path.join(process.cwd(), 'assets/files', ''+profile);
     const imageBuffer = fs.readFileSync(imagePath);
 
     // Set the response header to indicate it's an image

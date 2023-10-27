@@ -4,7 +4,7 @@ const multer = require("multer");
 
 const mongodbconfig= require('./config/mongodbconfig');
 const db_con = mongodbconfig.connectToDB;
-db_con();
+//db_con();
 
 const cors = require('cors');
 // Enable CORS for all routes
@@ -36,14 +36,15 @@ app.use(express.urlencoded({ extended: true }));
 // time to live for cookies
 const oneDay=100*60*60*24;
 app.use(session({
-	secret: process.env.SESSION_SECRET,
-	saveUninitialized: true,
-	resave: false,
+  secret: process.env.SESSION_SECRET,
+  saveUninitialized: true,
+  resave: false,
     cookie:{maxAge:oneDay},
 }));
 
 //global files
-app.use(express.static(path.join(__dirname, 'public', 'files')));
+app.use(express.static(path.join(__dirname, 'assets', 'files')));
+app.use(express.static(path.join(__dirname, 'build')));
 
 //middlewares
 const Middlewares  = require('./http/middlewares/authMiddleware');
@@ -76,7 +77,7 @@ const error_404_PNF  = require('./http/controllers/error_404');
 // Define the storage location and file name
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/files"); // Folder where the uploaded file will be stored
+    cb(null, "assets/files"); // Folder where the uploaded file will be stored
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -87,15 +88,15 @@ const storage = multer.diskStorage({
 // Define the storage location and file name
 const storage2 = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, "public/files"); // Folder where the uploaded file will be stored
+    callback(null, "assets/files"); // Folder where the uploaded file will be stored
   },
   filename: (req, file, callback) => {
-  	const { 
+    const { 
     username,
     usermail,
     userID,
 } = req.body.formData;
-  	const fileName = file.originalname
+    const fileName = file.originalname
 
     callback(null, userID+"-"+fileName);
   },
@@ -103,7 +104,7 @@ const storage2 = multer.diskStorage({
 
 const storage3 = multer.diskStorage({
   destination: (req, file, callback) => {
-  callback(null, "public/files"); 
+  callback(null, "assets/files"); 
     // Folder where the uploaded file will be stored
   },
   filename: (req, file, callback) => {
@@ -164,15 +165,15 @@ app.post('/auth/edit/edit-user-details',UsersContoller.EditUsersDetails);
 app.get('/logout/users',AuthController.logout);
 
 //end
-app.get('/',IndexController.foods); 
+app.get('*',IndexController.index); 
 
 
 
 
 app.listen(PORT, (error) =>{ 
-	if(!error)
+  if(!error)
         console.log("Server is Running on port "+ PORT) 
-	else
-		console.log("Error occurred, server can't start", error); 
-	} 
+  else
+    console.log("Error occurred, server can't start", error); 
+  } 
 ); 
