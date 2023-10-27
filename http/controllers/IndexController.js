@@ -7,7 +7,6 @@ const multer = require("multer");
 const fs = require("fs");
 //path
 const path = require("path");
-const { MongoClient } = require("mongodb");
 
 const index = async (req, res, next) => {
 

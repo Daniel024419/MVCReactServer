@@ -4,7 +4,6 @@ const fs = require("fs");
 const {connectToDB ,closeDB }= require('../../config/mongodbconfig');
 //path
 const path = require("path");
-const { MongoClient } = require('mongodb');
 
 const Users = async ( req , res , next )=>{
 

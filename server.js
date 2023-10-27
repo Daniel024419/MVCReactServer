@@ -44,6 +44,7 @@ app.use(session({
 
 //global files
 app.use(express.static(path.join(__dirname, 'assets', 'files')));
+//serve react build
 app.use(express.static(path.join(__dirname, 'build')));
 
 //middlewares
