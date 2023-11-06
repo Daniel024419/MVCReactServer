@@ -149,10 +149,10 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.CLIENT_SECRET_LOGIN,
 
   //developing
-  //  callbackURL: process.env.SERVER_APP_URL_DEV+'/auth/callback',
+  callbackURL: process.env.SERVER_APP_URL_DEV+'/auth/callback',
   
   //production
-  callbackURL: process.env.SERVER_API_URL_PRO+'/auth/callback',
+  //callbackURL: process.env.SERVER_API_URL_PRO+'/auth/callback',
 
 }, (accessToken, refreshToken, profile, done) => {
   // 'profile' contains user information, including the email
