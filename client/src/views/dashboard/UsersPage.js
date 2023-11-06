@@ -20,10 +20,8 @@ const [ users , setUsers]=useState([]);
 //initiate  to check user session
 Usersession();
 
-// useEffect(() => {
 
-   //fetch users
-
+ 
 // Fetch the image from the server
 api_connect.get('/auth/fetch-users')
   .then((response) => {
@@ -42,8 +40,7 @@ const statusCode = response.data.statusCode;
   .catch((error) => {
     console.error('Error fetching users:', error);
   });
-// }, [api_connect , users])
- 
+  
 
 	return (
 

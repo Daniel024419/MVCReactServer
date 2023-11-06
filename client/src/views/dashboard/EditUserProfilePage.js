@@ -35,15 +35,6 @@ const ProfilePage =  () => {
    const [userID, setuserID] = useState("");
 
 
-   
-   //console.log(getResponseMsg)
-   //console.log(reponse_message_code)
-
-
-	//checking user authentication
-  let isAuthenticated =localStorage.getItem('isAuthenticated');
-
-
 	const [dragOver, setDragOver] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -133,7 +124,7 @@ const ProfilePage =  () => {
     api_connect.get('/auth/fetch-user-profile/' + profile, { responseType: "blob" })
   .then((response) => {
     if (response.status === 200) { // Check the status code for success (200 OK)
-      return response.data; // Use response.data for Axios, not response.blob()
+      return response.data; 
     } else {
       throw new Error('Network response was not ok');
     }

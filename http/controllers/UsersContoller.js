@@ -1,13 +1,13 @@
-
-//file system
 const fs = require("fs");
 const {connectToDB ,closeDB }= require('../../config/mongodbconfig');
 //path
 const path = require("path");
+let db;
+const logger = require('../../logger');
 
 const Users = async ( req , res , next )=>{
 
-let db;
+
 try{
 //query
 db = await connectToDB();
@@ -17,12 +17,10 @@ const collection = db.collection('users');
 //fetching user password,empty
  const users = await collection.find().toArray();
  res.json(users);
- //console.log(users)
 
  if (users.length < 0) {
 
  res.status(200).json({ statusCode : 404 });
- //console.log("fetching failed..");
 
   }
 
@@ -32,7 +30,7 @@ const collection = db.collection('users');
 catch(error){
 	 res.status(501).json({ statusCode : 501 });
 
-	console.log("can not fetch all Users..."+ error);
+	logger.log('error','['+Date()+']can not fetch all Users...'+ error);
 }
 
 
@@ -49,7 +47,7 @@ const userID = req.params.userID;
 
 //console.log(userID);
 
-let db;
+
 try{
 //query
 db = await connectToDB();
@@ -62,8 +60,8 @@ const users_del = await collection.deleteOne({userID:userID});
 
 if ( users_del.deletedCount===1) {
 	
-console.log("user deleted..")
-console.log(userID)
+////console.log("user deleted..")
+//console.log(userID)
 res.status(200).json({message : "User deleted successfully..", statusCode : 200 });
 
 
@@ -75,7 +73,7 @@ res.status(200).json({message : "User deleted successfully..", statusCode : 200 
 
 }
 catch(error){
-	console.log("can not delete  Users..."+ error);
+	 logger.log('error','['+Date()+']can not delete  Users...'+ error);
 	 res.status(501).json({ message : "Failed to delete user....",statusCode : 501 });
 
 }
@@ -87,7 +85,7 @@ catch(error){
 const EditUsersDetails = async (req , res , next)=>{
 
 //update user datails here
-let db;
+
 try{
 
   const { 
@@ -162,23 +160,22 @@ hashedPassword = await hashPassword(password);
       ],
      });
 
-    console.log(userData)
+    //console.log(userData)
 
 
   res.status(200).json({ message: "User updated successfully", userData, statusCode : 200 });
- console.log("update successfull.."+username + "pass : "+password);
+// console.log("update successfull.."+username + "pass : "+password);
    
     }else{
 
     res.status(200).json({ message: "Update failed , Please try again ", statusCode : 501 });
-    console.log("update failed..");
 
     }
 
 }
 
-catch(e){
-	console.log("can not update user profile" + e)
+catch(error){
+	logger.log('error','['+Date()+'] can not update user profile' + error);
 	res.status(200).json({ message: "Update failed , Please try again ", statusCode : 501 });
     
 }

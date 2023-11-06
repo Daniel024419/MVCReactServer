@@ -33,18 +33,7 @@
     min-height: 100vh;
     background-color: var(--primary-color);
 }
-.dashboard-body.dark{
-    --primary-color: #3A3B3C;
-    --panel-color: #242526;
-    --text-color: #ddd;
-    --black-light-color: #CCC;
-    --border-color: #4D4C4C;
-    --toggle-color: #FFF;
-    --title-icon-color: #CCC;
-    --primary-color-top-title:#242526;
-    --primary-color-top-box:#242526;
 
-}
 /* === Custom Scroll Bar CSS === */
 ::-webkit-scrollbar {
     width: 8px;
@@ -377,6 +366,16 @@ box-shadow: rgba(33, 35, 38, 0.22) 0px 10px 10px -10px;
     color: var(--text-color);
     margin-left: 10px;
 }
+
+@media (max-width:900px){
+
+.dash-content .title .text{
+    font-size: 18px;
+
+}
+}
+
+
 .dash-content .boxes{
     display: flex;
     align-items: center;
@@ -867,7 +866,13 @@ color: red;
 
         #myTable th, #myTable td {
             text-align: left;
-            padding: 11px;
+            padding: 7px 10px;
+        }
+
+
+#myTable td {
+            text-align: left;
+            font-size: 15px;
         }
 
         #myTable tr {
@@ -1020,7 +1025,7 @@ box-shadow: rgba(60, 64, 67, 0.25) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1
 }
 
 
-
+/*
 .loader-wait-container .loader-wait{
 display: flex;
 flex-direction: column;
@@ -1035,4 +1040,23 @@ position: fixed;
   background-color: rgba(0, 0, 0, 0.7);
   justify-content: center;
   align-items: center;
+}*/
+
+/**/
+
+/* Styling for the user status circles */
+
+.user-status {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+
+}
+
+.online {
+    background-color: green; /* Green circle indicates online */
+}
+
+.offline {
+    background-color: red; /* Red circle indicates offline */
 }

@@ -14,9 +14,9 @@ const index = async (req, res, next) => {
   
   res.sendFile(path.join(__dirname,'../../build','index.html'));
 
-  }catch(e){
+  }catch(error){
 
-    console.log("index error ",e)
+    //console.log("index error ",e)
   }
 
 };

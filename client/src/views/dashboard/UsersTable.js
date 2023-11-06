@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import * as XLSX from 'xlsx'; // Import all functions and objects from xlsx
 
-import { DeleteUserController } from "../../controllers/DeleteUserController";
+import { DeleteUserController } from "../../controllers/DeleteController";
 //importing session
 import Usersession from '../dashboard/session/Usersession'
 const HomeTable = ( props ) => {
@@ -12,14 +12,13 @@ Usersession();
 
    const getResponseMsg = localStorage.getItem('message');
    const reponse_message_code = localStorage.getItem('reponse_message_code');
-   // const [ message , setResponseMessage ] = useState("");
-   // const [ messageCode , setmessageCode ] = useState("");
+   
 // handle delete , send id to controller
 const handleDelete = async (userId) => {
+   //pass userid as param to controller
     await DeleteUserController(userId);
     return;
-    //alert('user is '+ userId);
-};
+ };
 
 
 //clear message after effect
@@ -226,7 +225,7 @@ if (error_close_btn) {
         type="text"
         id="searchInput-table"
          className="searchInput-table"
-        placeholder="Search for names.."
+        placeholder="Search for anything.."
         title="Type in anything..."
       />
 
@@ -234,6 +233,7 @@ if (error_close_btn) {
         <table id="myTable">
           <thead>
             <tr className="header">
+              <th style={{width:'10px'}}></th>
               <th data-sort="name">Name</th>
               <th data-sort="Mail">Mail</th>
               <th data-sort="Tel">Tel</th>
@@ -251,10 +251,21 @@ if (error_close_btn) {
 
          {
 
-         props.users.length > 0 ? ( 
+props.users.length > 0 && props.users  ? ( 
             props.users.map( ( user , index) => (
-             <tr key={user._id}>
-              <td>{user.username}</td>
+<tr key={user._id}>
+             {
+              user.status==1 ?
+              (
+<td><div class="user-status online"></div>
+       </td>
+                ):(
+<td><div class="user-status offline"></div> </td>
+                )
+
+
+             } 
+             <td>{user.username}</td>
               <td>{user.usermail}</td>
               <td>{user.tel}</td>
               <td>{user.created_at}</td>

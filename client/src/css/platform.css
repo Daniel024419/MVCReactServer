@@ -1,0 +1,9 @@
+.TopNavBar-platform{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.h1{
+	font-size: 70px;
+}

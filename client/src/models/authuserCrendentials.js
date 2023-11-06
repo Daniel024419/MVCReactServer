@@ -70,7 +70,8 @@ return false;
 .catch( ( error ) =>{
 
  console.log("cannot fetch user " +error);
-
+localStorage.setItem('message',"Please , Try again" );
+localStorage.setItem('isAuthenticated', false);
 });
   //end fetch
 };

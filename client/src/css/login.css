@@ -134,8 +134,7 @@ font-size: 15px;
     flex-direction: column;
     justify-content: center;
     gap: 10px;
-    margin-left: 20px;
-}
+  }
 .login-view .login-options-submit-btn{
             cursor: pointer;
             padding: 10px 20px;
@@ -143,4 +142,5 @@ font-size: 15px;
             border-radius: 5px;
             outline: none;
             transition: all ease-in-out 0.3s;
+            background-color: gray;
         }

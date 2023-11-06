@@ -3,8 +3,9 @@ import axios from "axios";
 //https://projectlua.onrender.com
 const Api_connect_server =  ( ) => {
  const api = axios.create({
-  //baseURL: "http://localhost:3003"
-  baseURL: "https://projectlua.onrender.com"
+  //baseURL: process.env.REACT_APP_API_URL_DEV
+  //baseURL: "https://projectlua.onrender.com"
+  baseURL:process.env.REACT_APP_API_URL_PRO
 
 }); 
 	return api;

@@ -9,6 +9,8 @@ const multer = require("multer");
   
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
+let db;
+const logger = require('../../logger');
 
 const genRandomStr =  () => {
 
@@ -22,7 +24,7 @@ let randomstring =  genRandomStr();
 const UpdateUserData = async (  req, res , next ) => {
 
 //update user datails here
-let db;
+
 try{
 
   const { 
@@ -98,16 +100,15 @@ hashedPassword = await hashPassword(password);
       ],
      });
 
-    console.log(userData)
+   // console.log(userData)
 
 
   res.status(200).json({ message: "User updated successfully", userData, statusCode : 200 });
- console.log("update successfull.."+username + "pass " + hashedPassword + " "+password);
    
     }else{
 
     res.status(200).json({ message: "Update failed , Please try again ", statusCode : 501 });
-    console.log("update failed..");
+    logger.log('error','['+Date()+'] user update failed..');
 
     }
 
@@ -117,8 +118,9 @@ hashedPassword = await hashPassword(password);
 
 }
 
-catch(e){
-	console.log("can not update user profile" + e)
+catch(error){
+
+	logger.log('error','['+Date()+'] can not update user profile/ Internal error' + error)
 }
 
 }
@@ -128,12 +130,11 @@ catch(e){
 //upload user file
 const UpdateUserProfile = async ( req ,res ,next ) => {
  //update user datails here
-   let db;
+   
   try{
 // Get the uploaded file name
   const fileName = req.file.originalname;
   const userID = req.body.userID;
-  //console.log("User ID from frontend " +userID);
    
 let now = new Date();
 let hours = now.getHours();
@@ -163,37 +164,21 @@ let timestamp = hours+""+year;
       ],
      });
 
-  console.log(userData)
 
 
-  res.status(200).json({ userData ,message: "Profile updated successfully", statusCode : 200 });
-  console.log("uploaded successfully.."+timestamp+"-"+fileName);
- 
+  res.status(200).json({ userData ,message: "Profile updated successfully", statusCode : 200 }); 
    
     }else{
 
     res.status(200).json({ message: "Update failed , Please try again ", statusCode : 501 });
-    console.log("update failed.."+timestamp+"-"+fileName);
-
- 
-
-
+    logger.log('error','['+Date()+'] user profile update failed..fileName : '+timestamp+"-"+fileName);
     }
-
-   //console.log("User id from req " +randomstring);
 
   }
 
 catch(error){
-	console.log("can not update user credentials" + error)
+	logger.log('error','['+Date()+'] can not update user credentials' + error)
 }
-//close db con
-// finally {
-//     if (db) {
-//      closeDB();
-//     }
-
-//   }
 
 
 }
@@ -206,7 +191,6 @@ const fetchUserProfile = async ( req ,res , next )=>{
 
   let profile;
 
-  //console.log(profile_url)
 
   if (profile_url) {
 
@@ -232,7 +216,7 @@ const fetchUserProfile = async ( req ,res , next )=>{
 
   } catch (error) {
 
-    console.error('Error sending image , either dir not found or error '+profile);
+    logger.log('error','['+Date()+']Error sending image , either dir not found or error '+error);
     res.status(500).end('Internal Server Error');
   }
 
@@ -243,14 +227,13 @@ const fetchUserProfile = async ( req ,res , next )=>{
 //edit user file
 const EditUserProfile = async ( req ,res ,next ) => {
  //update user datails here
-   let db;
+   
   try{
 // Get the uploaded file name
   const fileName = req.file.originalname;
   const userID = req.body.userID;
   //console.log("User ID from frontend " +userID);
    
-console.log(userID)
 
 let now = new Date();
 let hours = now.getHours();
@@ -280,28 +263,20 @@ let timestamp = hours+""+year;
       ],
      });
 
-  console.log(userData)
 
 
   res.status(200).json({ userData ,message: "Profile updated successfully", statusCode : 200 });
-  console.log("uploaded successfully.."+timestamp+"-"+fileName);
- 
    
     }else{
 
     res.status(200).json({ message: "Editing failed , Please try again ", statusCode : 501 });
-    console.log("update failed.."+timestamp+"-"+fileName);
-
-
-
+ 
     }
-
-   //console.log("User id from req " +randomstring);
 
   }
 
 catch(error){
-  console.log("can not update user credentials" + error)
+ logger.log('error' , '['+Date()+'] can not update user credentials' + error)
   res.status(200).json({ message: "Editing failed , Please try again ", statusCode : 501 });
 
 }

@@ -6,7 +6,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 const ProfilePageFormPartial = () => {
   //user data
 
-  const usermail = localStorage.getItem("usermail");
+  const usermail_session = localStorage.getItem("usermail");
   const username = localStorage.getItem("username");
   const password = localStorage.getItem("password");
   const userID = localStorage.getItem("userID");
@@ -22,7 +22,7 @@ const ProfilePageFormPartial = () => {
   const [formData, setformData] = useState({
     username: username,
     password: "",
-    usermail: usermail,
+    usermail: usermail_session,
     tel: tel,
     role: role,
     created_at: created_at,
@@ -167,7 +167,7 @@ if (error_close_btn) {
             <input
               type="email"
               className="input-text"
-              value={usermail}
+              value={formData.usermail}
               onChange={handleChange}
               name="usermail"
             />

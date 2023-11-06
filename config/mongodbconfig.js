@@ -5,46 +5,34 @@ dotenv.config();
 const username = process.env.MongoDbOnlineUsername;
 const password = process.env.MongoDbOnlinePass;
 const clusterName = 'Cluster0';
-const dbName = process.env.MongoDbOnlineDbname; // Your database name
 
+const logger = require('../logger');
 //offline db
-//const dbName = process.env.dbNameOffline; 
-
-// MongoDB connection URL
-//const url = 'mongodb://localhost:27017'; // Replace with your MongoDB connection URL
-
+const dbName = process.env.dbNameOffline; 
+// MongoDB connection to local URL
+//const url = 'mongodb://localhost:27017/'+dbName; 
 
 const url = `mongodb+srv://${username}:${password}@${clusterName}.uzkrp1a.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
 // Create a Mongoose connection
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    console.log('Connected to the database');
-    // Call your connectToDB function to establish the connection
-  //  connectToDB();
   })
   .catch((error) => {
-    console.error('Error connecting to the database:', error);
+  //log error
+  logger.log('error', 'Error connecting to the database:', error);
+
+
   });
 
 
-      // Modify your connectToDB function to work with Mongoose
+  // connectToDB
 async function connectToDB() {
       try {
-        
-        // Check if collections exist and create them if needed
-        const collectionNames = ["users", "posts", "comments"];
-        collectionNames.forEach(async (collectionName) => {
-          const collectionExists = await mongoose.connection.db.listCollections({ name: collectionName }).hasNext();
-          if (!collectionExists) {
-            await mongoose.connection.db.createCollection(collectionName);
-            console.log(`Collection "${collectionName}" created.`);
-          }
-        });
-
         return mongoose.connection; // Return the Mongoose connection
       } catch (error) {
-        console.error('Error connecting to the database:', error);
+        logger.log('error', 'Error connecting to the database:', error);
+
       }
     }
 
@@ -54,10 +42,10 @@ async function connectToDB() {
       // Close the Mongoose connection when you're done
       mongoose.connection.close()
         .then(() => {
-          console.log('Connection to the database closed');
+          logger.log('error','Connection to the database closed');
         })
         .catch((error) => {
-          console.error('Error closing the database connection:', error);
+          logger.error('error', 'Error closing the database connection:', error);
         });
     }
 

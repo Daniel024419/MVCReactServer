@@ -32,7 +32,7 @@ console.log(message)
 
 //error 
 	console.log(error);
-	alert('internal error...');
+	//alert('internal error...');
 })
 }
 

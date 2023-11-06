@@ -1,17 +1,9 @@
 import { Link} from 'react-router-dom';
 import { useEffect, useState} from 'react'
 
-import  {DeleteUserController}  from '../../controllers/DeleteUserController';
 
 const HomeTable = () => {
 
-// handle delete , send id to controller
-
-	const handleDelete = async ( userId ) =>{
-		await DeleteUserController(userId);
-		return;
-		//alert('user is '+ userId);
-	}
 
 
 useEffect(() => {
@@ -71,62 +63,9 @@ const searchInputtable  = document.getElementById("searchInput-table");
 searchInputtable.addEventListener("keyup", SearchTable );
 
 
-
-//delete users
-// Get the logout button and logout modal
-const userIdButton = document.querySelectorAll("#userIdButton");
-const deleteModal = document.getElementById("deleteModal");
-const cancelDelete = document.getElementById("cancelDelete");
-const confirmDelete = document.getElementById("confirmDelete");
-let usernamedelete =document.getElementById("username-delete");
-
-let userId;
-function handleuserIdButton(event) {
-	deleteModal.style.display = "block";
-	userId = event.target.getAttribute("datauserid");
-	usernamedelete.textContent = event.target.getAttribute("datausername");
-	 //alert(userId);
-	 //alert(usernamedelete);
-}
-
-//add function each
-
-
-userIdButton.forEach(function(Btnelem) {
-Btnelem.addEventListener("click", handleuserIdButton);
-});
-// Show the logout modal when the logout button is clicked
-//userIdButton.addEventListener("click", handleuserIdButton);
-
-function handleconfirmDelete(event) {
-  deleteModal.style.display = "none";
-  //alert('logged out');
-   handleDelete(userId);
-}
-
-// Handle logout when the "Yes" button is clicked
-confirmDelete.addEventListener("click",handleconfirmDelete );
-
-  function handlecancelDelete() {
-  deleteModal.style.display = "none";	
-  //alert('cancelled');
-   }
-
- // Handle logout when the "Yes" button is clicked
-cancelDelete.addEventListener("click",handlecancelDelete );
-
-
-
-
 //remove effect
 	return () => {
 searchInputtable.removeEventListener("keyup", SearchTable );
-//userIdButton.removeEventListener("click", handleuserIdButton);
-userIdButton.forEach(function(Btnelem) {
-Btnelem.removeEventListener("click", handleuserIdButton);
-});
-cancelDelete.removeEventListener("click",handlecancelDelete );
-confirmDelete.removeEventListener("click",handleconfirmDelete );
 
      };
 }, [])
@@ -151,9 +90,10 @@ confirmDelete.removeEventListener("click",handleconfirmDelete );
 <thead>
     <tr className="header">
         <th data-sort="name">Name</th>
-        <th data-sort="country">Country</th>
 
-        <th>A</th>
+        <th data-sort="location">Location</th>
+
+        <th>Action</th>
     </tr>
 </thead>
 
@@ -163,20 +103,10 @@ confirmDelete.removeEventListener("click",handleconfirmDelete );
     <td colSpan="3">No results found</td>          
  </tr>
 
- <tr>
-  <td>Alfreds Futterkiste</td>
-  <td>Kofi</td>
-  <td className="menu-icon">
-    <span className="menu-icon-content">&#8942;</span>
-    <div className="table-dropdown dropdown-1">
-      <Link to="#"><i className="fas fa-edit edit-icon" title="Edit"></i></Link>
-      <Link to="#"><i className="fas fa-trash delete-icon" title="Delete" id="userIdButton" datauserid="999"  datausername="Alfreds Futterkiste" ></i></Link>
-    </div>
-  </td>
-</tr>
+
 <tr>
-  <td>Berglunds snabbkop</td>
-  <td>Sweden</td>
+  <td>John Forson</td>
+  <td>Kumasi</td>
   <td className="menu-icon">
     <span className="menu-icon-content">&#8942;</span>
     <div className="table-dropdown dropdown-2">
@@ -187,8 +117,8 @@ confirmDelete.removeEventListener("click",handleconfirmDelete );
 </tr>
 
 <tr>
-  <td>Berglunds snabbkop</td>
-  <td>Sweden</td>
+  <td>Paul Marts</td>
+  <td>Accra</td>
   <td className="menu-icon">
     <span className="menu-icon-content">&#8942;</span>
     <div className="table-dropdown dropdown-2">
@@ -198,8 +128,8 @@ confirmDelete.removeEventListener("click",handleconfirmDelete );
   </td>
 </tr>
 <tr>
-  <td>Berglunds snabbkop</td>
-  <td>Sweden</td>
+  <td>Esi Tom</td>
+  <td>Cape Coast</td>
   <td className="menu-icon">
     <span className="menu-icon-content">&#8942;</span>
     <div className="table-dropdown dropdown-2">
@@ -209,8 +139,8 @@ confirmDelete.removeEventListener("click",handleconfirmDelete );
   </td>
 </tr>
 <tr>
-  <td>Berglunds snabbkop</td>
-  <td>Sweden</td>
+  <td>Hariet Sam </td>
+  <td>Takoradi</td>
   <td className="menu-icon">
     <span className="menu-icon-content">&#8942;</span>
     <div className="table-dropdown dropdown-2">
@@ -220,8 +150,8 @@ confirmDelete.removeEventListener("click",handleconfirmDelete );
   </td>
 </tr>
 <tr>
-  <td>Berglunds snabbkop</td>
-  <td>Sweden</td>
+  <td>Abigail Sarpomah</td>
+  <td>Tarkwa</td>
   <td className="menu-icon">
     <span className="menu-icon-content">&#8942;</span>
     <div className="table-dropdown dropdown-2">

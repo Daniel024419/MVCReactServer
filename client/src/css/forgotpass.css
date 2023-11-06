@@ -1,0 +1,83 @@
+		.forget-password-form-container{
+			margin: 0;
+			padding: 0;
+
+		}
+ .forget-password-form-container .forget-password-form{
+  justify-content: center;
+  align-content: center;
+  border-radius: 4px;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  text-align: center;
+  margin: 7% auto;
+  width: 27%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+		}
+
+
+@media (max-width:900px){
+.forget-password-form-container .forget-password-form{
+
+  margin: 100px auto;
+  width: 80%;
+
+
+		}
+		}
+		.forget-password-form-container .forget-password-form 
+		.forget-password-form-controll {
+			width: 100%;
+		}
+		.forget-password-form-container .forget-password-form 
+		.forget-password-form-controll .usermail{
+    width: 90%;
+    padding: 10px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline:#ddd;
+  		}
+
+
+		.forget-password-form-container .forget-password-form
+		.submit-btn{
+     padding: 12px 30px;
+    border-radius: 5px;
+       border: none;
+       cursor: pointer;
+
+		}
+
+		.forget-password-form-container .error-message{
+			color: white;
+			font-weight: 600;
+			font-size: 14px;
+ 		}
+
+		.forget-password-form-container .login-tag{
+			 
+		}
+
+		.forget-password-form-container .href-link{
+			 text-decoration: none;
+			 
+		}
+
+		.forget-password-form-container .forget-password-form .banner{
+			padding: 10px 20px;
+			background: red;
+			opacity: 9;
+			border-radius: 3px;
+
+		}
+
+
+				.forget-password-form-container .forget-password-form .banner-sucess{
+			padding: 10px 20px;
+			background: green;
+			opacity: 9;
+			border-radius: 3px;
+
+		}

@@ -8,6 +8,10 @@ const jwt = require('jsonwebtoken');
 //multer and upload location
 const multer = require("multer");
 const bcrypt = require('bcryptjs');
+const logger = require('../../logger');
+///env viriables
+const dotenv = require("dotenv");
+dotenv.config();
 
 const User_Session = {
   userID: "",
@@ -18,12 +22,15 @@ const User_Session = {
   updated_at: "",
   usermail: "",
   role: "",
-  tel: ""
+  tel: "",
+  last_visit:"",
  
 };
 
+const secretKey = process.env.token_secret;
 
 
+let db;
 
 auth = async (req, res, next) => {
 
@@ -38,13 +45,8 @@ const hashPassword = async (password) => {
 }
 
 const hashedPassword = await hashPassword(password_input);
-console.log(password_input+" "+ hashedPassword);
 
 // Secret key for JWT signing and verification (keep it secret)
-const secretKey = process.env.token_secret;
-
-
-  let db;
 
   try {
  
@@ -76,7 +78,7 @@ const user_token = {
   username: userData.username,
 };
   // Generate a JWT
-  const token = jwt.sign(user_token, secretKey, { expiresIn: '24h' }); // '1h' means the token expires in 1 hour
+  const token = jwt.sign(user_token, secretKey, { expiresIn: '24h' }); // '1h' means the token expires in 24 hours
 
    User_Session.userID=userData.userID;
    User_Session.username=userData.username;
@@ -86,12 +88,28 @@ const user_token = {
    User_Session.usermail=userData.usermail;
    User_Session.role=userData.role;
    User_Session.tel=userData.tel;
+   User_Session.last_visit=userData.last_visit;
    req.session.Authenticated = true;
    const Authenticated = req.session.Authenticated;
    req.session.User = User_Session;
    //req.session.save();
    const sessionuser = req.session.User;
-   console.log(userData);
+
+
+       //fetching user by auth
+      await collection.updateOne(
+      //find user with id
+      { userID : userData.userID},
+      //update user profile with the new file name...
+      { $set: { 
+
+        status : 1,
+        last_visit:Date(),
+      }}
+      );
+
+
+    //update last visit
 
     res.status(200).json({userData , message:"Authenticated as "+user_input_mailOrUsername 
     ,token,statusCode:200});
@@ -100,7 +118,7 @@ const user_token = {
   else{
 
  res.status(200).json({message : "Password Error... ",statusCode:401});
- console.log("user not Authorized: code  401");
+  logger.log('error',"user not Authorized: code  401");
   //send password error response back
   }
 
@@ -110,31 +128,114 @@ const user_token = {
   else  {
 
     res.status(200).json({message : "User not found.. ",statusCode:404});
-    console.log("no user found 404");
 
     }
 
 
   } catch (e) {
-    if (e) {
-    console.log("auth error logging /  internal error", e);
+    if (error) {
+   logger.log('error',"auth error logging /  internal error", e);
     } 
    
   }
-  // finally {
-  //   if (db) {
-  //    closeDB();
-  //   }
-
-  // }
- 
+  
 };
 
 
+//google auth
+
+const googleUthCallback = async (req, res)  =>{
+const email = req.user.emails[0].value;
+
+
+  try {
+ 
+    //query
+    db = await connectToDB();
+
+    const collection = db.collection('users');
+
+    const userData = await collection.findOne({
+      $or: [
+        { usermail: email },
+      ],
+     
+    });
+//user found
+if (userData) {
+
+// User information you want to include in the JWT payload
+const user_token = {
+  userID: userData.userID,
+  username: userData.username,
+};
+  // Generate a JWT
+  const token = jwt.sign(user_token, secretKey, { expiresIn: '24h' }); // '1h' means the token expires in 24 hours
+
+   User_Session.userID=userData.userID;
+   User_Session.username=userData.username;
+   User_Session.profile=userData.profile;
+   User_Session.created_at=userData.created_at;
+   User_Session.updated_at=userData.updated_at;
+   User_Session.usermail=userData.usermail;
+   User_Session.role=userData.role;
+   User_Session.tel=userData.tel;
+   User_Session.last_visit=userData.last_visit;
+   req.session.Authenticated = true;
+   const Authenticated = req.session.Authenticated;
+   req.session.User = User_Session;
+   //req.session.save();
+   const sessionuser = req.session.User;
+
+ //fetching user by auth
+      await collection.updateOne(
+      //find user with id
+      { userID : userData.userID},
+      //update user profile with the new file name...
+      { $set: { 
+
+        status : 1,
+        last_visit:Date(),
+
+
+      }}
+      );
+
+// Encrypt the data and create a token
+//URL_REDIRECT back to client
+const data_token = jwt.sign({userData , message:"Authenticated as "+email ,token,statusCode:200}, secretKey);
+res.redirect(`${process.env.SERVER_APP_URL_REDIRECT}/auth/google/callback?data_token=${data_token}`);
+
+}else{
+res.status(200).json({message : "User not found.. ",statusCode:404});
+}
+
+}catch(error){
+logger.log('error',"authenticating error /  internal error", error);
+
+}
+}
+ 
+
+ //logout
+
+
 const logout = async (  req , res , next )=>{
+let db = await connectToDB();
+    const collection = db.collection('users');
+   //fetching user by auth
+    await collection.updateOne(
+      //find user with id
+      { userID : User_Session.userID || ''},
+      //update user profile with the new file name...
+      { $set: { 
 
+        status : 0,
+        last_visit:Date(),
+
+      }}
+      );
 req.session.destroy( ( err )=>{
-
 
 if (!err){
 
@@ -150,7 +251,7 @@ if (!err){
 res.status(200).json({message : "Account logout sucsessfully.. ",statusCode:200});
 
 
-console.log("user logged out sucsessfully")
+//console.log("user logged out sucsessfully")
 }
 
 else{
@@ -167,6 +268,6 @@ else{
 }
 
 module.exports = {
-  auth: auth,
+  auth: auth,googleUthCallback:googleUthCallback,
   logout:logout
 };

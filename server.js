@@ -1,11 +1,12 @@
 const express = require('express'); 
 const app = express();
 const multer = require("multer");
-
 const mongodbconfig= require('./config/mongodbconfig');
 const db_con = mongodbconfig.connectToDB;
 //db_con();
-
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+//auth origins
 const cors = require('cors');
 // Enable CORS for all routes
 app.use(cors());
@@ -18,7 +19,9 @@ dotenv.config();
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 const session = require('express-session');
-
+const EventEmitter = require('events'); 
+// Increase the event listener limit for Express (change 15 to your desired limit)
+EventEmitter.setMaxListeners(100);
 //path
 const path = require("path");
 // Initialization cookie
@@ -39,7 +42,9 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   saveUninitialized: true,
   resave: false,
-    cookie:{maxAge:oneDay},
+    cookie:{name: 'google-auth-session',
+    keys: ['key1', 'key2'],
+    maxAge:oneDay},
 }));
 
 //global files
@@ -50,6 +55,8 @@ app.use(express.static(path.join(__dirname, 'build')));
 //middlewares
 const Middlewares  = require('./http/middlewares/authMiddleware');
 
+
+//controllers
 //index conrollers
 const  IndexController  = require('./http/controllers/IndexController');
 
@@ -68,7 +75,11 @@ const AddUserController  = require('./http/controllers/AddUserController');
 const UsersContoller  = require('./http/controllers/UsersContoller');
 
 
+//artisans
+const ArtisansController = require('./http/controllers/ArtisansController');
 
+//VerificationController
+VerificationController = require('./http/controllers/VerificationController');
 
 //error_404
 const error_404_PNF  = require('./http/controllers/error_404');
@@ -127,6 +138,52 @@ const profileUpload = multer({ storage: storage2 });
 const profileUploadpic = multer({ storage: storage3 });
 
 
+ // var YOUR_CLIENT_ID = '530295393593-8fgv9m3h3ccc90cf6dlht76i971kptk2.apps.googleusercontent.com';
+ // var YOUR_CLIENT_SECRET = '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';
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new GoogleStrategy({
+  clientID:  process.env.CLIENT_ID_LOGIN,
+  clientSecret: process.env.CLIENT_SECRET_LOGIN,
+
+  //developing
+  //  callbackURL: process.env.SERVER_APP_URL_DEV+'/auth/callback',
+  
+  //production
+  callbackURL: process.env.SERVER_API_URL_PRO+'/auth/callback',
+
+}, (accessToken, refreshToken, profile, done) => {
+  // 'profile' contains user information, including the email
+  return done(null, profile);
+}));
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
+// Auth 
+app.get('/google/auth', passport.authenticate('google', {
+  scope: ['https://www.googleapis.com/auth/userinfo.email' ],
+}));
+
+app.get('/auth/callback',
+  passport.authenticate('google', { failureRedirect: '/auth/callback/failure' }),
+AuthController.googleUthCallback
+);
+
+//end
+// failure
+app.get('/auth/callback/failure',
+  (req, res) => {
+    console.log("google auth error");
+  });
+
 // Middleware for authentication
 app.use('/auth', Middlewares.AuthMiddleware);
 
@@ -154,18 +211,35 @@ app.post('/auth/add-new-user',profileUpload.single("file"),AddUserController.Add
 //UsersContoller
 app.get('/auth/fetch-users',UsersContoller.Users);
 
-//UsersContoller
-app.get('/auth/fetch-users/:user',UsersContoller.Users);
-
-
+//deleteUsers
+app.delete('/auth/delete-users/:userID',UsersContoller.deleteUsers);
 //edit user
 
 app.post('/auth/edit/edit-user-details',UsersContoller.EditUsersDetails);
+
+
+
+
+//artisans controller 
+app.get('/auth/fetch-artisans',ArtisansController.artisans);
+//deleteUsers
+app.delete('/auth/delete-artisan/:artisanId',ArtisansController.deleteArtisan);
+
+
+
+
+//verify user mail
+app.post('/auth/user/verify-usermailorTel',VerificationController.VerifyUsermail);
+
+//update forgot passord 
+app.post('/auth/user/update-forgot-password',VerificationController.UpdateForgotPassword);
+
 
 //logout
 app.get('/logout/users',AuthController.logout);
 
 //end
+//serve client
 app.get('*',IndexController.index); 
 
 

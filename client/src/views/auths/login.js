@@ -15,6 +15,8 @@ const Login = ( props ) => {
 
   let message = localStorage.getItem('message');
   let isAuthenticated =localStorage.getItem('isAuthenticated');
+let password_update_success = localStorage.getItem('password_update_success');
+const [error, seterrorState] = useState(false);
 
   // Function to clear the notification
   // Regular expression for email validation
@@ -57,7 +59,7 @@ const handleSubmit = async ( event )=>{
     // Simulate an API request 
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 7000);
 
     authUserController(formData);
 
@@ -65,17 +67,13 @@ const handleSubmit = async ( event )=>{
 
 	}
 
-if (isAuthenticated==="true") {
-    window.location.href = '/auth/dashboard';
-}
+//redirect google login
+const handleLoginWithGoogle = () => {
+  // Redirect the user to your server for Google authentication
+  window.location.href = process.env.REACT_APP_API_URL_DEV+'/google/auth';
 
-
-	// const handleLogout = async () =>{
-	// 	await LogoutController();
-
-	// 	return;
-	// }
-
+};
+	
 
 	return (
   <div className="login-view">
@@ -115,7 +113,7 @@ if (isAuthenticated==="true") {
 
 <div className="login-options" >
 
-<button type="submit" title="login" className="login-options-submit-btn" onClick={handleSubmit}>
+<button type="button" title="login" className="login-options-submit-btn" onClick={handleLoginWithGoogle}>
  Login with Google
  </button>
 
@@ -127,17 +125,26 @@ if (isAuthenticated==="true") {
 
  <div  className="createAc-container" >
 
-<Link to="/"> Create account here</Link>
+<Link to="/signup"> Create account here</Link>
 
  </div>
+<Link to="/forgot-password" > Forgot Password ?</Link>
 
         </form>
 
-      {!message == "" && (
-        <div className="login-alert">
-          {message}   
-        </div>
-      )}
+{!message == "" && localStorage.getItem('isAuthenticated')==false && (
+<div className="login-alert">
+{message}   
+</div>
+)}
+
+{ !message == "" && error == false  && password_update_success &&   (
+<div className="login-alert" style={{backGround:'green'}}>
+{message}   
+</div>
+)}
+
+
         </div>
         </div>
     </div>
